@@ -7,7 +7,7 @@
 - ***[dbinfo.properties](https://github.com/ismyblue/NiceJavaFramework/blob/master/sql/dbinfo.properties)*** SqlHelper.java的配置文件，配置数据库驱动字段，连接url，用户名，密码，连接池的连接数。
 
 ## xml
-- ***[XmlDomHelper.java](https://github.com/ismyblue/NiceJavaFramework/blob/master/sql/dbinfo.properties)*** xml文件读取帮助类。java标准库Jaxp的DOM方法读写xml文件的一个封装类。可以一句话获得xml文档对象，一句话更新xml文件。
+- ***[XmlDomHelper.java](https://github.com/ismyblue/NiceJavaFramework/blob/master/xml/XmlDomHelper.java)*** xml文件读取帮助类。java标准库Jaxp的DOM方法读写xml文件的一个封装类。可以一句话获得xml文档对象，一句话更新xml文件。
 
 ### ***注意：***
 各文件夹下的Project里面是各个封装的类的使用工程，测试工程
