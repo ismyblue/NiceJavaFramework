@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+  <author name="ismyblue" location="China" home="hengyang">content</author>
+  <!--这是注释-->
+  <author name="joy" home="HengNanXian">Content2this is CDATA -content2 updated-</author>
+</root>
