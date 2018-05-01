@@ -1,11 +1,12 @@
 package com.ismyblue.entity;
 
+import java.util.ArrayList;
 
 public class Book {
 	
 	private String title = null;	  
 	private String lang = null;
-	private String[] authors = null;
+	private ArrayList<String> authors = null;
 	private double  price= 0;
 	private String year = null;
 	
@@ -21,12 +22,17 @@ public class Book {
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
-	public String[] getAuthors() {
+	public ArrayList<String> getAuthors() {
 		return authors;
 	}
-	public void setAuthors(String[] authors) {
-		this.authors = authors;
+	public void setAuthors(ArrayList<String> authors) {
+		this.authors = (ArrayList<String>) authors;
 	}
+	
+	public void setAuthor(String author) {
+		this.authors.add(author);
+	}
+	
 	public double getPrice() {
 		return price;
 	}
@@ -51,7 +57,12 @@ public class Book {
 		return stringBuffer.toString();
 		
 	}
-	public Book(String title, String lang, String[] authors, double price, String year) {
+	
+	public Book() {
+		this.authors = new ArrayList<String>();
+	}
+	
+	public Book(String title, String lang, ArrayList<String> authors, double price, String year) {
 		super();
 		this.title = title;
 		this.lang = lang;

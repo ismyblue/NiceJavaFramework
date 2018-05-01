@@ -59,8 +59,8 @@ public class XmlDomHelper {
 	}
 	
 	
-	public static Document getDocument(String url) throws SAXException, IOException {
-			return documentBuilder.parse(url);
+	public static Document getDocument(String uri) throws SAXException, IOException {
+			return documentBuilder.parse(uri);
 	}
 
 	public static Document getDocument(File file) throws SAXException, IOException {
@@ -117,11 +117,11 @@ public class XmlDomHelper {
 	/**
 	 * 更新Xml
 	 * @param node 要更新的内容
-	 * @param url 更新到这里
+	 * @param uri 更新到这里
 	 * @throws TransformerException
 	 */
-	public static void updateXml(Node node, String url) throws TransformerException {	
-		transformer.transform(new DOMSource(node),new StreamResult(url));		
+	public static void updateXml(Node node, String uri) throws TransformerException {	
+		transformer.transform(new DOMSource(node),new StreamResult(uri));		
 	}
 
 	/**

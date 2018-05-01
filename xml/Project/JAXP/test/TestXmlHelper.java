@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.xml.transform.TransformerException;
 
@@ -48,8 +49,11 @@ public class TestXmlHelper {
 		Document document = XmlDomHelper.getDocument("Book.xml");		
 		Element rootElement = document.getDocumentElement();
 		
-		String[] authors = {"huanghao","joy","Lee"};
-	
+		ArrayList<String> authors = new ArrayList<>();
+		authors.add("huanghao");
+		authors.add("Joy");
+		authors.add("Lee"); 
+		
 		insertInNode(document, rootElement, new Book("一本好书", "en", authors, 35.5, "2018"));
 		XmlDomHelper.updateXml(document, "Book.xml");
 		
@@ -75,9 +79,10 @@ public class TestXmlHelper {
 		newBook.appendChild(document.createTextNode("\n\t\t"));
 		newBook.appendChild(bookTitle);		
 		
-		for(int i = 0;i <book.getAuthors().length;i++) {
+		ArrayList<String> authors = book.getAuthors();
+		for(int i = 0;i < authors.size();i++) {
 			Element author = document.createElement("author");
-			author.setTextContent(book.getAuthors()[i]);
+			author.setTextContent(authors.get(i));
 			newBook.appendChild(document.createTextNode("\n\t\t"));
 			newBook.appendChild(author);
 		}
