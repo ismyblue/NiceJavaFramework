@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<bookstore>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><bookstore>
 	<book>
 		<title lang="cn">hadoop</title>
 		<author>huanghao</author>
@@ -19,5 +18,13 @@
 		<author>bob</author>
 		<price>30</price>
 		<year>1970</year>
+	</book>
+	<book>
+		<title lang="en">一本好书</title>
+		<author>huanghao</author>
+		<author>Joy</author>
+		<author>Lee</author>
+		<price>35.5</price>
+		<year>2018</year>
 	</book>
 </bookstore>

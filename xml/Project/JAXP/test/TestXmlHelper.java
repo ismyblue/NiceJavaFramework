@@ -12,34 +12,12 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import com.ismyblue.entity.Book;
-import com.ismyblue.util.XmlDomHelper;
+import com.ismyblue.xmldao.XmlDomHelper;
 
 public class TestXmlHelper {
-	
-	
-	/**
-	 * 测试能否获得一个Document对象
-	 * @throws IOException 
-	 * @throws SAXException 
-	 */
-	public void testGetDocument() throws SAXException, IOException {
 
-		System.out.println(XmlDomHelper.getDocument("Book.xml"));
-	}
 
-	/**
-	 * 获得某一个节点的text
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws DOMException 
-	 */
-	public void testGetTextContentByTagName() throws DOMException, SAXException, IOException {
-
-		System.out.println(XmlDomHelper.getDocument("Book.xml").getElementsByTagName("price").item(0).getTextContent());
-
-	}
-
-	// @Test
+	//@Test
 	public void testListAllElement() throws SAXException, IOException {
 		XmlDomHelper.listAll(XmlDomHelper.getDocument("Book.xml"));
 	}
@@ -55,6 +33,7 @@ public class TestXmlHelper {
 		authors.add("Lee"); 
 		
 		insertInNode(document, rootElement, new Book("一本好书", "en", authors, 35.5, "2018"));
+		
 		XmlDomHelper.updateXml(document, "Book.xml");
 		
 		XmlDomHelper.listAll(XmlDomHelper.getDocument("Book.xml"));
