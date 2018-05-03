@@ -169,4 +169,25 @@ public class Dom4j {
 	}
 	
 	
+	@Test
+	
+	//* 测试dom4j对xpath查询方式的支持	 
+	public void testXpathQuery() throws DocumentException {
+		//解析出dom对象生成dom树
+		Document document = new SAXReader().read("src/Book.xml");
+		Element root = document.getRootElement();
+		//获得所有具有lang=cn属性的节点
+		List<Node> books = document.selectNodes("//title[@lang='cn']");
+		for(int i = 0;i < books.size();i++) {
+			System.out.printf("%s %s 路径：%s\n",books.get(i).getName(),books.get(i).getText(),books.get(i).getPath());
+		}
+		
+		Element secondBook = (Element) root.selectSingleNode("/bookstore/book[2]");
+		System.out.printf("%s 路径：%s\n",secondBook.getName(),secondBook.getPath());
+		List<Node> titles = secondBook.selectNodes("//title");
+		System.out.println(titles.size());
+		System.out.println("***************");
+		
+	}
+	
 }
