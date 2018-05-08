@@ -49,6 +49,7 @@ public class Dom4j {
 		System.out.println(secondBookTitle.attributes());
 		System.out.println(secondBookTitle.attributeValue("lang"));
 		
+		
 	}
 	
 	//遍历所有元素节点
