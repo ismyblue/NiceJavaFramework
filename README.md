@@ -27,5 +27,14 @@
 - ***XPath方式(推荐使用):适用于快速查询***
 - ***[jaxen-1.1.6.jar](https://github.com/ismyblue/NiceJavaFramework/blob/master/xml/jaxen-1.1.6.jar)***  XPath是是一门在XML 文档中查找信息的语言。XPath 用于在XML 文档中通过元素和属性进行导航。XPath 使用路径表达式在XML 文档中进行导航.类比XPath查询xml节点，就像sql查询数据库一样。在dom4j中使用XPath需要引入这个Jaxen的jar包。[jaxen的主页](https://github.com/jaxen-xpath/jaxen) 以及 [XPath tutorial](http://zvon.org/xxl/XPathTutorial/General/examples.html)
 
+## fileio
+- ***[FileUploadUtil.java]()*** 文件上传工具类，一句话接受浏览器上传文件到指定目录（jar包所需:commons-fileupload-1.3.3.jar,commons-io-2.6.jar)
+- ***[FileDownloadUtil.java]()*** 文件下载工具类，一句话下载webapp指定目录的文件到浏览器
+
+> jar包
+
+- ***[commons-fileupload-1.3.3.jar]()*** FileUploadUtil.java运行的核心jar包
+- ***[commons-io-2.6.jar]()*** FileUploadUtil.java运行的依赖jar包 
+
 ### ***注意：***
 各文件夹下的Project里面是各个封装的类的使用工程，测试工程
