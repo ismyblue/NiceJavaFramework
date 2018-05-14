@@ -29,7 +29,7 @@ public class UploadServlet extends HttpServlet {
 		Map<String, String[]> fieldMap = new HashMap<String, String[]>();
 		try {
 			FileUploadUtil fileUploadUtil = new FileUploadUtil();
-			fileUploadUtil.parseRequset(request, fieldMap, "/upload");
+			fileUploadUtil.parseRequset(request, fieldMap, "/WEB-INF/upload");
 		} catch (FileUploadException e1) {
 			System.out.println("文件上传失败");
 			e1.printStackTrace();
