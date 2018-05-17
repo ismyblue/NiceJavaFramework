@@ -38,8 +38,10 @@
 
 ## util
 - ***[CaptchaUtil.java](https://github.com/ismyblue/NiceJavaFramework/blob/master/util/CaptchaUtil.java)*** 一次性验证码，可以指定图片宽度，高度，验证码字符个数，干扰线数量，图片格式，以及指定显示的验证码。
-!(随机验证码)[https://github.com/ismyblue/NiceJavaFramework/blob/master/src/captch1.jpg]
-!(指定验证吗)[https://github.com/ismyblue/NiceJavaFramework/blob/master/src/captch2.jpg]
+
+![指定验证码](https://github.com/ismyblue/NiceJavaFramework/blob/master/src/captch1.jpg)
+
+![指定验证吗](https://github.com/ismyblue/NiceJavaFramework/blob/master/src/captch2.jpg)
 
 ### ***注意：***
 各文件夹下的Project里面是各个封装的类的使用工程，测试工程
