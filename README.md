@@ -31,14 +31,15 @@
 - ***[FileUploadUtil.java](https://github.com/ismyblue/NiceJavaFramework/blob/master/fileio/FileUploadUtil.java)*** 文件上传工具类，一句话接受浏览器上传文件到指定目录（jar包所需:commons-fileupload-1.3.3.jar,commons-io-2.6.jar)
 - ***[FileDownloadUtil.java](https://github.com/ismyblue/NiceJavaFramework/blob/master/fileio/FileDownloadUtil.java)*** 文件下载工具类，一句话下载webapp指定目录的文件到浏览器
 
-> jar包
-
-- ***[commons-fileupload-1.3.3.jar](https://github.com/ismyblue/NiceJavaFramework/blob/master/fileio/jar/commons-fileupload-1.3.3.jar)*** FileUploadUtil.java运行的核心jar包
-- ***[commons-io-2.6.jar](https://github.com/ismyblue/NiceJavaFramework/blob/master/fileio/jar/commons-io-2.6.jar)*** FileUploadUtil.java运行的依赖jar包 
 
 ## jsp
 - ***[JspToHtmlUtil.java](https://github.com/ismyblue/NiceJavaFramework/blob/master/jsp/JspToHtmlUtil.java)*** Jsp生成html文件类，通过一个jsp模板，根据不同的数据动态生成html静态页面。这个html的内容是jsp最终展现给用户的内容，两者内容一样，但是静态的html文件大大的提高了访问效率，减小了服务器压力。
 
+
+## util
+- ***[CaptchaUtil.java](https://github.com/ismyblue/NiceJavaFramework/blob/master/util/CaptchaUtil.java)*** 一次性验证码，可以指定图片宽度，高度，验证码字符个数，干扰线数量，图片格式，以及指定显示的验证码。
+!(随机验证码)[https://github.com/ismyblue/NiceJavaFramework/blob/master/src/captch1.jpg]
+!(指定验证吗)[https://github.com/ismyblue/NiceJavaFramework/blob/master/src/captch2.jpg]
 
 ### ***注意：***
 各文件夹下的Project里面是各个封装的类的使用工程，测试工程
