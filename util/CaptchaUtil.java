@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -44,12 +45,12 @@ public class CaptchaUtil {
 	//字符和边框的距离 与图片高度比值
 //	private float margin_top = 1/10;
 	//字符和边框的距离 与图片宽度的比值
-	private float margin_left = 1/10;
+	private float margin_left = 1f/10;
 	//字符重叠的距离 与字符宽度的比值
-	private float overlap = 1/2; 
+	private float overlap = 1f/5; 
 	//字符的宽度  不要怀疑这个公式，我和女朋友想讨论出来的
 //	private int charSizeWidth =	(int) ( ((width - 2*margin_left*width)/(wordCount - wordCount*overlap + overlap)) );
-	private int charSizeWidth;
+	private float charSizeWidth;
 //	int charSizeHeight = (int) ( height - 2*margin_top*height );
 	
 	/**
@@ -92,9 +93,9 @@ public class CaptchaUtil {
 		this.height = height;
 		this.wordCount = wordCount;
 		this.lineCount = lineCount;
-		//得到随机验证码
-		this.captcha = createCaptcha();
-		this.charSizeWidth =	(int) ( ((width - 2*margin_left*width)/(wordCount - wordCount*overlap + overlap)) );
+//		//得到随机验证码
+//		this.captcha = createCaptcha();//先不获得captcha，创建burreredIamge的使用要判读是否是用户指定了captcha		
+		this.charSizeWidth =  (float)((width - 2*margin_left*width)/(wordCount - wordCount*overlap + overlap)) ;
 		createBufferedImage();
 	}
 	
@@ -112,7 +113,7 @@ public class CaptchaUtil {
 		this.lineCount = lineCount;
 		//计算到的验证码的长度
 		this.wordCount = captcha.length();
-		this.charSizeWidth =	(int) ( ((width - 2*margin_left*width)/(wordCount - wordCount*overlap + overlap)) );
+		this.charSizeWidth =  ((width - 2.0f*margin_left*width)/(wordCount - wordCount*overlap + overlap)) ;
 		createBufferedImage();
 	}
 	
@@ -175,12 +176,13 @@ public class CaptchaUtil {
 		graphics.drawRect(0, 0, width - 1, height - 1);			
 		//把画笔cast成2d画笔
 		Graphics2D graphics2d = (Graphics2D) graphics;
-		//画笔设置字体		
-		graphics.setFont(new Font("宋体", Font.BOLD, (int) (charSizeWidth*1.5)));		
+		//画笔设置字体
 		Random random = new Random();
+		setFont(graphics2d);
+		
 		//画出验证码
 		int x = (int) (margin_left*width);
-		int y = height/2 + charSizeWidth/2;		
+		int y = (int) (height/2.0f + charSizeWidth/2.0f);		
 		for (int i = 0; i < wordCount; i++) {			
 			// 随机颜色
 			graphics2d.setColor(getColor(255));
@@ -192,9 +194,10 @@ public class CaptchaUtil {
 			char c = captcha.charAt(i);			
 			// 将c输出到图片
 			graphics2d.rotate(theta, x, y);
-			graphics2d.drawString(String.valueOf(c), x, y);
-			graphics2d.rotate(-theta, x, y);
+			graphics2d.drawString(String.valueOf(c), x, y);			
+			graphics2d.rotate(-theta, x, y);		
 			x += (charSizeWidth - charSizeWidth*overlap);
+			
 		}	
 		// 步骤五 绘制干扰线		
 		int x1,x2,y1,y2;
@@ -239,6 +242,23 @@ public class CaptchaUtil {
 		return sBuffer.toString();
 	}
 	
+	/**
+	 * 给画笔设置字体
+	 * @param graphics2d
+	 */
+	private void setFont(Graphics2D graphics2d) {
+		Random random = new Random();
+		String[] fonts; 		
+		if(this.captcha != null){//如果是用户指定验证码，可能出现中文，所以指定中文字体格式
+			fonts = new String[]{"宋体","楷体","行书","PMingLiU","Monospaced","微软雅黑","MingLiU_HKSCS","DialogInput","Serif"};
+		}else {
+			fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+			this.captcha = createCaptcha();
+		}		
+
+		graphics2d.setFont(new Font(fonts[random.nextInt(fonts.length)], Font.BOLD, (int) (charSizeWidth*2)));
+
+	}
 	
 }
 

@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -22,67 +23,124 @@ import org.apache.commons.io.FilenameUtils;
 
 public class FileUploadUtil {	
 	
-	/**
-	 * 解析请求，把请求中的表单数据提取出到Map集合中，把请求中的文件提取到指定路径中
-	 * @param request
-	 * @param m	表单字段map<String, String[]>
-	 * @param dirPath 文件要存入webapp的绝对路径
-	 * @throws FileUploadException 
-	 * @throws UnsupportedEncodingException 
-	 */
-	public void parseRequset(HttpServletRequest request, Map<String, String[]> m,String dirPath) throws FileUploadException {
-		if(!ServletFileUpload.isMultipartContent(request)){
-			System.out.println("你的form表单不是multipart/form-data!");
-			return ;
-		}
-		DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
-		ServletFileUpload fileUpload = new ServletFileUpload(diskFileItemFactory);
+	private Map<String, String[]> parameterMap;
+	private HttpServletRequest request; 
+	private DiskFileItemFactory diskFileItemFactory;
+	private ServletFileUpload fileUpload;
+	private List<FileItem> fileItems;
+	
+	
+	public FileUploadUtil(HttpServletRequest request) throws Exception{
+		diskFileItemFactory = new DiskFileItemFactory();
+		fileUpload = new ServletFileUpload(diskFileItemFactory);
 		fileUpload.setHeaderEncoding("UTF-8");
-		List<FileItem> fileItems = fileUpload.parseRequest(request);
+		this.request = request;		
+		parameterMap = new HashMap<String, String[]>();
+		
+		if(!ServletFileUpload.isMultipartContent(request)){
+			throw new Exception("你的form表单不是multipart/form-data!");			
+		}
+		
+		fileItems = fileUpload.parseRequest(request);
 		//遍历FileItem
 		for(FileItem fileItem : fileItems){
+			
 			//如果fileItem是表单项
 			if(fileItem.isFormField()){
-				processFormField(fileItem, m);
-			}else{//如果不是表单项，是一个文件
-				processFile(fileItem, m, request.getServletContext().getRealPath(""), dirPath);
+				processFormField(fileItem);
+				fileItem.delete();
 			}
-			fileItem.delete();
+			//如果是文件，先不存，把文件存入磁盘再存入parametermap			
+			
 		}		
 	}
+	
+	/*
+	 * 获得参数map
+	 */
+	public Map<String, String[]> getParameterMap(){
+		return parameterMap;
+	}
+	
+	/**
+	 * 获取参数的value,如果没有则返回null
+	 * @param key
+	 * @return
+	 */
+	public String getParamter(String key){
+		if(parameterMap.get(key) != null){
+			return parameterMap.get(key)[0];
+		}
+		return null;		
+	}
+	
+	/**
+	 * 获得参数的values,如何没有则返回null
+	 * @param key
+	 * @return
+	 */
+	public String[] getParamterValues(String key){
+		if(parameterMap.get(key) != null){
+			return parameterMap.get(key);
+		}
+		return null;
+	}
+	
+	/**
+	 * 获得所有参数的name,如果没有则返回null
+	 * @param key
+	 * @return
+	 */
+	public String[] getParamterNames(Object key){
+		String[] names = new String[parameterMap.size()];
+		names = parameterMap.keySet().toArray(names);		
+		return names;
+	}
+	
+	/**
+	 * 把上传的文件数据存到指定的路径下
+	 * @param dirPath  网站app根目录下的相对路径
+	 * @throws FileUploadException
+	 */
+	public void saveInToDir(String dirPath) throws FileUploadException {		
+		
+		//遍历FileItem
+		for(FileItem fileItem : fileItems){
+			//如果fileItem不是是表单项，是文件			
+			if(!fileItem.isFormField()){			
+				processFile(fileItem, dirPath);
+			}
+			fileItem.delete();
+		}
+	}
+	
 
 	/**
 	 * 处理表单字段,把name 和 value 添加到表单字段map中Map<String, String[]>
 	 * @param fileItem
-	 * @throws UnsupportedEncodingException 
 	 */
-	private void processFormField(FileItem fileItem, Map<String, String[]> m) {
-			
+	private void processFormField(FileItem fileItem) {			
 		//字段名
 		String name = fileItem.getFieldName();
 		//字段值 
 		String value;
 		try {
 			value = fileItem.getString("UTF-8");
-			addToFieldMap(m, name, value);
+			addToFieldMap(name, value);
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		} 		
 	}
 
 	/**
-	 * 把key 和value添加到字段的map中，HashMap<String,String[]>
-	 * @param m
+	 * 把key 和value添加到字段的map中，HashMap<String,String[]>	 
 	 * @param key
 	 * @param value
 	 */
-	private void addToFieldMap(Map<String, String[]> m, String key, String value){
-		LinkedList<String> list = null;			
-		if(m.get(key) == null){
-			list = new LinkedList<String>();
-		}		
+	private void addToFieldMap(String key, String value){
+		LinkedList<String> list = new LinkedList<String>();	
 		
-		String[] values = m.get(key);
+		String[] values = parameterMap.get(key);
 		if(values != null){
 			for(int i = 0;i < values.length;i++){
 				list.add(values[i]);
@@ -90,18 +148,16 @@ public class FileUploadUtil {
 		}
 		list.add(value);
 		values = new String[list.size()];
-		m.put(key, list.toArray(values));			
+		parameterMap.put(key, list.toArray(values));			
 	}
 	
 	
 	/**
 	 * 处理上传的文件，把上传的文件改名，存到指定的应用目录中，往字段map（map<String, String[]>）中存入name = 文件路径名
 	 * @param fileItem
-	 * @param m
-	 * @param appPath 网站主目录
-	 * @param dirPath 网站下存储的绝对路径
+	 * @param dirPath
 	 */
-	private void processFile(FileItem fileItem, Map<String, String[]> m, String appPath, String dirPath) {
+	private void processFile(FileItem fileItem,String dirPath) {
 		//获得上传文件的表单字段名
 		String fieldName = fileItem.getFieldName();
 		//获得上传文件的完整路径或者是文件名
@@ -114,8 +170,8 @@ public class FileUploadUtil {
 			fileName = FilenameUtils.getName(fileName);
 		fileName = UUID.randomUUID() + "_" + fileName;		
 		//得到这个文件在网站app存放的相对目录
-		File pareDir = getPareDirByFileName(fileName, dirPath);		
-		File absPareDir = new File(appPath + pareDir.getPath());
+		File relativePath = getRelativePath(dirPath, fileName);		
+		File absPareDir = new File(request.getServletContext().getRealPath("") + relativePath.getPath());
 		if(!absPareDir.exists())absPareDir.mkdirs();		
 		//创建这个文件的位置
 		File newFile = new File(absPareDir, fileName);	
@@ -135,31 +191,28 @@ public class FileUploadUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//把文件的路径加入到表单字段Map<String, String[]>中
-		String dir = pareDir + File.separator +  fileName;
-		dir = dir.replace("\\", "/");
-		addToFieldMap(m, fieldName, dir);	
-		
+		//把文件的路径加入到表单字段Map<String, String[]>中		
+		addToFieldMap(fieldName, relativePath.getPath().replace("\\", "/") + "/" + fileName);
 	}
 	
 
 	/**
 	 * 通过一个文件名得到这个文件在这个网站下应该存放的相对目录
+	 * @param dirPath 网站下的相对路径
 	 * @param fileName 文件名
-	 * @param dirPath 起始绝对路径
-	 * @return
+	 * @return "dirpath/x/x/fileName"
 	 */
-	private File getPareDirByFileName(String fileName, String dirPath){
+	private File getRelativePath(String dirPath, String fileName){
 		//得到文件名的哈希值的字符串
 		int hashcode = fileName.hashCode();				
 		hashcode = hashcode<0?-hashcode:hashcode;
 		String hashCodeString = String.valueOf(hashcode);		
 		//创建双层目录，防止文件重名
-		File pareDir = new File(dirPath + File.separator + hashCodeString.substring(0, 1)
+		File relativePath = new File(dirPath + File.separator + hashCodeString.substring(0, 1)
 								+ File.separator + hashCodeString.substring(1, 2));		
-		if(!pareDir.exists()){
-			pareDir.mkdirs();
+		if(!relativePath.exists()){
+			relativePath.mkdirs();
 		}		
-		return pareDir;
+		return relativePath;
 	}
 }

@@ -10,11 +10,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class FIleDownloadUtil {
+public class FileDownloadUtil {
 
 	/**
 	 * 从服务器下载一个文件到浏览器
-	 * @param request 请求包
+	 * @param request i请求包
 	 * @param response 响应包
 	 * @param filePath 要下载的文件的真实路径，绝对路径
 	 */
@@ -34,8 +34,8 @@ public class FIleDownloadUtil {
 				fileName = URLEncoder.encode(fileName, "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-			}  
-        	System.out.println("fsafasdfs");
+			} 
+        	
         } else {  
             // 非IE浏览器的处理：  
         	try {
